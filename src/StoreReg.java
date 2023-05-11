@@ -1,20 +1,33 @@
 import java.util.Map;
 
-public class RegisterReg {
+public class StoreReg {
 
-    public void store(String str) {
-        Map<String,Integer> map=ShowReg.mapList;
-        String[] split = str.split(",");
-        String substring = split[1].substring(1);
-        int value = Integer.parseInt(substring.toUpperCase());
-        String[] s = split[0].split(" ");
-        String move=s[0].toUpperCase(),mv=s[1].toUpperCase();
-        if(move.equals("MV")) {
-            if (map.containsKey(mv)) {
-                map.put(mv, map.get(mv) + value);
-            } else {
-                map.put(mv, value);
+    Utils utils=new Utils();
+    SingleTonMap singleTonMap=SingleTonMap.getInstance();
+    Map<String ,Integer> map=singleTonMap.getMap();
+    public void store(String key, String value)  {
+        if(value.startsWith("#")) {
+            int val=Integer.parseInt(value.substring(1));
+            if (map.containsKey(key)){
+                map.put(key,map.get(key)+val);
+            }
+            else{
+                map.put(key,val);
             }
         }
+        utils.writeMethod(map);
+    }
+    public void store1(String key, String value){
+        if(Character.isAlphabetic(value.charAt(0)) && map.containsKey(value)){
+            map.put(key,map.get(value)+map.get(key));
+        }
+        else if(Character.isDigit(value.charAt(0))) {
+             if (map.containsKey(key)) {
+                 map.put(key, Integer.parseInt(value) + map.get(key));
+             } else {
+                 map.put(key, Integer.parseInt(value));
+             }
+         }
+        utils.writeMethod(map);
     }
 }
